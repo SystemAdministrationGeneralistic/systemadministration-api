@@ -1,0 +1,47 @@
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Dependencias de desarrollo
+*.suo
+*.user
+*.sln
+*.sw?
+*.bak
+*.tmp
+*.log
+*.vscode/
+.vs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.pid
+*.seed
+*.pid.lock
+lib-cov
+coverage
+.nyc_output
+.grunt
+bower_components
+.lock-wscript
+build/Release
+node_modules/
+jspm_packages/
+typings/
+demos/
+docs/
+example/
+test/fixtures/
+test/tmp/
+test/fixtures/tmp/
+website/tmp/
+dist/
+.venv/
+.env
+
+# Entorno de ejecución de Node.js
+npm-debug.log
+node_modules/
+.pnp
+.pnp.js
