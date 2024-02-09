@@ -2,11 +2,13 @@ const express = require('express');
 const app = express();
 const dotenv = require('dotenv');
 const bodyParse = require("body-parser")
+const cors = require('cors');
 const { connectDB, disconnectDB, promisePool } = require('./dbConection/db'); 
 const productRoutes = require('./src/routes/productRoute');
 dotenv.config();
 connectDB();
 
+app.use(cors());
 
 app.use(express.json());
 

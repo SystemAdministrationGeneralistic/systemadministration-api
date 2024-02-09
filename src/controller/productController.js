@@ -12,7 +12,9 @@ const { promisePool } = require('../../dbConection/db');
 
   exports.getAllProduct = async (req, res) => {
     try {
-      const [rows, fields] = await promisePool.query('select * from Product p inner join Supplier s on p.SupplierId=s.Id inner join Category c on c.Id=p.CategoryId');     
+      const [rows, fields] = await promisePool.query(`select p.name as productName,p.description,p.CodArt,p.quantity,p.price,c.name as categoryName,s.name as supplierName from Product p
+      inner join Supplier s on p.SupplierId=s.Id
+      inner join Category c on c.Id=p.CategoryId;`);     
       res.status(200).json(rows);
     } catch (error) {
       console.error('Error en la consulta a la base de datos:', error.message);
@@ -31,9 +33,25 @@ const { promisePool } = require('../../dbConection/db');
   };
 
   exports.createProduct = async (req, res) => {
+    console.log(req.body)
+    const {name,description,quantity,price,codArt,supplierId,categoryId}=req.body;
     try {
-      const [rows, fields] = await promisePool.query('SELECT * FROM ejemplos');
-      res.json(rows);
+      const [rows, fields] = await promisePool.execute(`insert into Product (
+        creationDate,
+        modificationDate,
+        deletationDate,
+        name,
+        description,
+        quantity,
+        price,
+        CodArt,
+        SupplierId,
+        CategoryId)
+        VALUES
+        (NOW(),NOW(),null,?,?,?,?,?,?,?);`,[name,description,quantity,price,codArt,supplierId,categoryId]);
+
+        await connection.end();
+        res.status(200).send('OK');
     } catch (error) {
       console.error('Error en la consulta a la base de datos:', error.message);
       res.status(500).send('Error interno del servidor');
@@ -41,9 +59,15 @@ const { promisePool } = require('../../dbConection/db');
   };
 
   exports.updateProduct = async (req, res) => {
+    const {name,description,quantity,price,codArt,supplierId,categoryId,id}=req.body;
     try {
-      const [rows, fields] = await promisePool.query('SELECT * FROM ejemplos');
-      res.json(rows);
+      const updateQuery = `update Product set modificationDate=now(),name=?,description=?,quantity=?,price=?,CodArt=?,SupplierId=?,CategoryId=? where id=?`;
+      const newData = [name,description,quantity,price,codArt,supplierId,categoryId,id]; // Ejemplo de nuevo valor y ID del registro a actualizar
+  
+      const [rows, fields] = await promisePool.execute(updateQuery, newData);
+  
+          await promisePool.end();
+          res.status(200).send('OK');
     } catch (error) {
       console.error('Error en la consulta a la base de datos:', error.message);
       res.status(500).send('Error interno del servidor');
