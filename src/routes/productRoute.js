@@ -12,7 +12,7 @@ router.get('/', productController.getAllProduct);
 router.get('/:id', productController.getProductById);
 router.post('/', productController.createProduct);
 router.put('/', productController.updateProduct);
-router.delete('/', productController.deleteProduct);
+router.delete('/:id', productController.deleteProduct);
 // router.get('/',[
 //     body('nombre').notEmpty().withMessage('El campo nombre no puede estar vacío'),
 //     body('descripcion').isLength({ min: 5 }).withMessage('La descripción debe tener al menos 5 caracteres'),

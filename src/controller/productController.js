@@ -23,9 +23,12 @@ const { promisePool } = require('../../dbConection/db');
   };
 
   exports.getProductById = async (req, res) => {
+    const {id}=req.params
     try {
-      const [rows, fields] = await promisePool.query('SELECT * FROM ejemplos');
-      res.json(rows);
+      const [rows, fields] = await promisePool.query(`select p.name as productName,p.description,p.CodArt,p.quantity,p.price,c.name as categoryName,s.name as supplierName from Product p
+      inner join Supplier s on p.SupplierId=s.Id
+      inner join Category c on c.Id=p.CategoryId where p.id=${id}`);     
+      res.status(200).json(rows);
     } catch (error) {
       console.error('Error en la consulta a la base de datos:', error.message);
       res.status(500).send('Error interno del servidor');
@@ -33,7 +36,6 @@ const { promisePool } = require('../../dbConection/db');
   };
 
   exports.createProduct = async (req, res) => {
-    console.log(req.body)
     const {name,description,quantity,price,codArt,supplierId,categoryId}=req.body;
     try {
       const [rows, fields] = await promisePool.execute(`insert into Product (
@@ -50,7 +52,7 @@ const { promisePool } = require('../../dbConection/db');
         VALUES
         (NOW(),NOW(),null,?,?,?,?,?,?,?);`,[name,description,quantity,price,codArt,supplierId,categoryId]);
 
-        await connection.end();
+       
         res.status(200).send('OK');
     } catch (error) {
       console.error('Error en la consulta a la base de datos:', error.message);
@@ -66,7 +68,7 @@ const { promisePool } = require('../../dbConection/db');
   
       const [rows, fields] = await promisePool.execute(updateQuery, newData);
   
-          await promisePool.end();
+          
           res.status(200).send('OK');
     } catch (error) {
       console.error('Error en la consulta a la base de datos:', error.message);
@@ -75,9 +77,14 @@ const { promisePool } = require('../../dbConection/db');
   };
 
   exports.deleteProduct = async (req, res) => {
+    const {id}=req.params
     try {
-      const [rows, fields] = await promisePool.query('SELECT * FROM ejemplos');
-      res.json(rows);
+      const deleteQuery = 'delete from Product where id=?';     
+  
+      const [rows, fields] = await promisePool.execute(deleteQuery, [id]);
+        
+      
+      res.status(200).send('OK');
     } catch (error) {
       console.error('Error en la consulta a la base de datos:', error.message);
       res.status(500).send('Error interno del servidor');
