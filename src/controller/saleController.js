@@ -1,45 +1,45 @@
-const Product = require('../model/productModel');
+const Sale = require('../model/saleModel');
 const Supplier= require('../model/supplierModel')
 const Category = require('../model/categoryModel')
 
-  exports.getAllProduct = async (req, res) => {
+  exports.getAllSale = async (req, res) => {
     try {
-      const products = await Product.findAll({
+      const sales = await Sale.findAll({
         include: [
           { model: Supplier, attributes: ['bussinessName'] }, // Incluir información del proveedor
           { model: Category, attributes: ['name'] } // Incluir información de la categoría
         ]
       });    
-      res.status(200).json(products);
+      res.status(200).json(sales);
     } catch (error) {
       console.error('Error en la consulta a la base de datos:', error.message);
       res.status(500).send('Error interno del servidor');
     }
   };
 
-  exports.getProductById = async (req, res) => {
+  exports.getSaleById = async (req, res) => {
     const {id}=req.params
     try {
-      const product = await Product.findByPk(id,{
+      const sale = await Sale.findByPk(id,{
         include: [
           { model: Supplier, attributes: ['bussinessName'] }, // Incluir información del proveedor
           { model: Category, attributes: ['name'] } // Incluir información de la categoría
         ]
       });     
-      res.status(200).json(product);
+      res.status(200).json(sale);
     } catch (error) {
       console.error('Error en la consulta a la base de datos:', error.message);
       res.status(500).send('Error interno del servidor');
     }
   };
 
-  exports.createProduct = async (req, res) => {
+  exports.createSale = async (req, res) => {
    console.log(req.body)
 
     req.body.creationDate=new Date()
     req.body.modificationDate=new Date()
     try {
-      await Product.create(req.body);
+      await Sale.create(req.body);
        
         res.status(200).send('OK');
     } catch (error) {
@@ -48,13 +48,13 @@ const Category = require('../model/categoryModel')
     }
   };
 
-  exports.updateProduct = async (req, res) => {
+  exports.updateSale = async (req, res) => {
    
     try {
-      const product = await Product.findByPk(req.body.id);
-    if (product) {
+      const sale = await Sale.findByPk(req.body.id);
+    if (sale) {
       req.body.id=undefined
-      await product.update(req.body);
+      await sale.update(req.body);
     }
           
       res.status(200).send('OK');
@@ -64,12 +64,12 @@ const Category = require('../model/categoryModel')
     }
   };
 
-  exports.deleteProduct = async (req, res) => {
+  exports.deleteSale = async (req, res) => {
     const {id}=req.params
     try {
-      const product = await Product.findByPk(id);
-    if (product) {
-      await product.destroy();
+      const sale = await Sale.findByPk(id);
+    if (sale) {
+      await sale.destroy();
     }
       
       res.status(200).send('OK');

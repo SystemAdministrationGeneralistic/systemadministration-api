@@ -5,6 +5,10 @@ const bodyParse = require("body-parser")
 const cors = require('cors');
 const { connectDB, disconnectDB, promisePool } = require('./dbConection/db'); 
 const productRoutes = require('./src/routes/productRoute');
+const categoryRoutes = require('./src/routes/categoryRoute');
+// const supplierRoutes = require('./src/routes/supplierRoute');
+// const clientRoutes = require('./src/routes/clientRoute');
+// const saleRoutes = require('./src/routes/saleRoute');
 dotenv.config();
 connectDB();
 
@@ -15,10 +19,11 @@ app.use(express.json());
 app.use(bodyParse.urlencoded({extended:true}))
 app.use(bodyParse.json())
 
-app.use('/product', productRoutes);
-app.use('/sale', productRoutes);
-app.use('/supplier', productRoutes);
-app.use('/client', productRoutes);
+app.use('product', productRoutes);
+app.use('category', categoryRoutes);
+// app.use('api/supplier', supplierRoutes);
+// app.use('api/client', clientRoutes);
+// app.use('api/sale', saleRoutes);
 
 // Desconectar la base de datos al cerrar la aplicación
 process.on('SIGINT', async () => {
