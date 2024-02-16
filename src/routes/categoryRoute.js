@@ -3,14 +3,19 @@ const router = express.Router();
 const { validateFields } = require('../middleware/validatorMiddleware');
 const categoryController = require('../controller/categoryController');
 const { authenticateToken } = require('../middleware/authMiddleware');
-const { body } = require('express-validator');
+const { body, check} = require('express-validator');
 
  //router.use(authenticateToken);
 
 router.get('/', categoryController.getAllcategory);
 router.get('/:id', categoryController.getcategoryById);
-router.post('/', categoryController.createcategory);
-router.put('/', categoryController.updatecategory);
+router.post('/',[
+        body().notEmpty().withMessage('El campo nombre no puede estar vacío'), 
+        check('name').not().isNumeric().withMessage('El campo no puede ser un número'),            
+      ], validateFields, categoryController.createcategory)
+router.put('/',[  body('name').notEmpty().withMessage('El campo nombre no puede estar vacío'), 
+      check('name').not().isNumeric().withMessage('El campo no puede ser un número'),              
+      ], validateFields, categoryController.updatecategory);
 router.delete('/:id', categoryController.deletecategory);
 // router.get('/',[
 //     body('nombre').notEmpty().withMessage('El campo nombre no puede estar vacío'),

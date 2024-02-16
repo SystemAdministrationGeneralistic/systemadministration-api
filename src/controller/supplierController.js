@@ -34,7 +34,6 @@ const Category = require('../model/categoryModel')
   };
 
   exports.createProduct = async (req, res) => {
-   console.log(req.body)
 
     req.body.creationDate=new Date()
     req.body.modificationDate=new Date()

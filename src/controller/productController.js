@@ -10,10 +10,17 @@ const Category = require('../model/categoryModel')
           { model: Category, attributes: ['name'] } // Incluir información de la categoría
         ]
       });    
-      res.status(200).json(products);
+      res.status(200).json({
+        status:'Ok',
+        data:products,
+        messagge:"successfully"
+      });
     } catch (error) {
-      console.error('Error en la consulta a la base de datos:', error.message);
-      res.status(500).send('Error interno del servidor');
+      res.status(500).send({
+        status:'error',
+        data:null,
+        messagge:error.message
+      });
     }
   };
 
@@ -26,25 +33,38 @@ const Category = require('../model/categoryModel')
           { model: Category, attributes: ['name'] } // Incluir información de la categoría
         ]
       });     
-      res.status(200).json(product);
+      res.status(200).json({
+        status:'Ok',
+        data:product,
+        messagge:"successfully"
+      });
     } catch (error) {
-      console.error('Error en la consulta a la base de datos:', error.message);
-      res.status(500).send('Error interno del servidor');
+      res.status(500).send({
+        status:'error',
+        data:null,
+        messagge:error.message
+      });
     }
   };
 
   exports.createProduct = async (req, res) => {
-   console.log(req.body)
 
     req.body.creationDate=new Date()
     req.body.modificationDate=new Date()
     try {
       await Product.create(req.body);
        
-        res.status(200).send('OK');
+      res.status(200).json({
+        status:'Ok',
+        data:category,
+        messagge:"successfully"
+      });
     } catch (error) {
-      console.error('Error en la consulta a la base de datos:', error.message);
-      res.status(500).send('Error interno del servidor');
+      res.status(500).send({
+        status:'error',
+        data:null,
+        messagge:error.message
+      });
     }
   };
 
@@ -55,12 +75,25 @@ const Category = require('../model/categoryModel')
     if (product) {
       req.body.id=undefined
       await product.update(req.body);
+    }else {
+      res.status(200).send({
+        status:'error',
+        data:null,
+        messagge:"No se puede actualizar, no existe el producto"
+      })
     }
           
-      res.status(200).send('OK');
+    res.status(200).json({
+      status:'Ok',
+      data:null,
+      messagge:"successfully"
+    });
     } catch (error) {
-      console.error('Error en la consulta a la base de datos:', error.message);
-      res.status(500).send('Error interno del servidor');
+      res.status(500).send({
+        status:'error',
+        data:null,
+        messagge:error.message
+      });
     }
   };
 
@@ -70,11 +103,23 @@ const Category = require('../model/categoryModel')
       const product = await Product.findByPk(id);
     if (product) {
       await product.destroy();
-    }
-      
-      res.status(200).send('OK');
+    }else {
+      res.status(200).send({
+        status:'error',
+        data:null,
+        messagge:"No se puede eliminar, no existe el producto"
+      })
+    }       
+    res.status(200).json({
+      status:'Ok',
+      data:null,
+      messagge:"successfully"
+    });
     } catch (error) {
-      console.error('Error en la consulta a la base de datos:', error.message);
-      res.status(500).send('Error interno del servidor');
+      res.status(500).send({
+        status:'error',
+        data:null,
+        messagge:error.message
+      });
     }
   };
